@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxing Career Simulator</title>
+    <style>
+        body {
+            background-color: #0f111a;
+            color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #1a1c29;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #2e3248;
+        }
+        h1 {
+            color: #f1c40f;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #b2bec3;
+            font-size: 0.9rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            background: #0f111a;
+            border: 1px solid #2e3248;
+            color: #fff;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2ecc71;
+        }
+        #dashboard {
+            display: none;
+        }
+        .stat-box {
+            background: #0f111a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #f1c40f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- PANTALLA DE CREACIÓN -->
+    <div id="creation-screen">
+        <h1>HEAVYWEIGHT SIMULATOR</h1>
+        <div class="subtitle">Creación de Legado</div>
+        
+        <div class="form-group">
+            <label>Nombre del Boxeador:</label>
+            <input type="text" id="fighterName" placeholder="Ej. Rick Seidel">
+        </div>
+
+        <div class="form-group">
+            <label>Apodo:</label>
+            <input type="text" id="fighterNickname" placeholder="Ej. The Destroyer">
+        </div>
+
+        <div class="form-group">
+            <label>Posición del Apodo:</label>
+            <select id="nicknameStyle">
+                <option value="before">Antes del nombre (The Destroyer Rick)</option>
+                <option value="middle" selected>Entre nombre y apellido (Rick "The Destroyer" Seidel)</option>
+                <option value="after">Al final (Rick Seidel "The Destroyer")</option>
+                <option value="none">Sin apodo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>País de Origen:</label>
+            <select id="country">
+                <option value="Venezuela">🇻🇪 Venezuela</option>
+                <option value="México">🇲🇽 México</option>
+                <option value="Estados Unidos">🇺🇸 Estados Unidos</option>
+                <option value="Japón">🇯🇵 Japón</option>
+                <option value="Reino Unido">🇬🇧 Reino Unido</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Guardia (Stance):</label>
+            <select id="stance">
+                <option value="Orthodox">Ortodoxo (Orthodox)</option>
+                <option value="Southpaw">Zurdo (Southpaw)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Estilo de Pelea:</label>
+            <select id="fightingStyle">
+                <option value="In-Fighter">In-Fighter / Swarmers (Presión constante)</option>
+                <option value="Peek-a-Boo">Peek-a-Boo (Guardia cerrada y ganchos explosivos)</option>
+                <option value="Shoulder Roll">Shoulder Roll (Defensa de hombros y contragolpe)</option>
+                <option value="Out-Boxer">Out-Boxer (Distancia y movilidad)</option>
+                <option value="Boxer-Puncher">Boxer-Puncher (Equilibrio técnica y pegada)</option>
+                <option value="Slugger">Slugger / Brawler (Búsqueda de nocaut)</option>
+                <option value="Counterpuncher">Counterpuncher (Paciente y castigo al error)</option>
+                <option value="Maromero">Maromero (Heterodoxo y elusivo)</option>
+                <option value="Showman">Showman (Espectáculo y reflejos)</option>
+            </select>
+        </div>
+
+        <button onclick="createFighter()">¡Iniciar Carrera!</button>
+    </div>
+
+    <!-- PANTALLA PRINCIPAL (DASHBOARD) -->
+    <div id="dashboard">
+        <h1 id="displayName"></h1>
+        <div class="subtitle" id="displayDetails"></div>
+        
+        <div class="stat-box">
+            <p><strong>Estilo:</strong> <span id="displayStyle"></span></p>
+            <p><strong>Guardia:</strong> <span id="displayStance"></span></p>
+            <p><strong>Récord:</strong> 0 - 0 - 0</p>
+            <p><strong>Ranking Mundial:</strong> #900 (División)</p>
+        </div>
+
+        <button onclick="alert('Próximamente: ¡Motor de Combate en Vivo y Calendario Amateur!')">Ir al Gimnasio / Siguiente Pelea</button>
+    </div>
+</div>
+
+<script>
+    function createFighter() {
+        const name = document.getElementById('fighterName').value || "Novato";
+        const nickname = document.getElementById('fighterNickname').value;
+        const nickStyle = document.getElementById('nicknameStyle').value;
+        const country = document.getElementById('country').value;
+        const stance = document.getElementById('stance').value;
+        const style = document.getElementById('fightingStyle').value;
+
+        let fullName = name;
+        if(nickname && nickStyle !== 'none') {
+            if(nickStyle === 'before') fullName = `"${nickname}" ${name}`;
+            else if(nickStyle === 'middle') {
+                let parts = name.split(' ');
+                if(parts.length > 1) {
+                    fullName = `${parts[0]} "${nickname}" ${parts.slice(1).join(' ')}`;
+                } else {
+                    fullName = `${name} "${nickname}"`;
+                }
+            }
+            else if(nickStyle === 'after') fullName = `${name} "${nickname}"`;
+        }
+
+        // Guardar en localStorage para que no se pierda al recargar
+        const fighter = { fullName, country, stance, style };
+        localStorage.setItem('boxerData', JSON.stringify(fighter));
+
+        showDashboard(fighter);
+    }
+
+    function showDashboard(fighter) {
+        document.getElementById('creation-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        
+        document.getElementById('displayName').innerText = fighter.fullName;
+        document.getElementById('displayDetails').innerText = `${fighter.country} | 18 Años`;
+        document.getElementById('displayStyle').innerText = fighter.style;
+        document.getElementById('displayStance').innerText = fighter.stance;
+    }
+
+    // Cargar si ya existía una partida guardada
+    window.onload = function() {
+        const saved = localStorage.getItem('boxerData');
+        if(saved) {
+            showDashboard(JSON.parse(saved));
+        }
+    }
+</script>
+
+</body>
+</html>
